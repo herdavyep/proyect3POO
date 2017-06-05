@@ -1,0 +1,31 @@
+
+
+body {
+
+  color: white;
+  background-image: url('fondoCodigos.jpg');
+  
+      
+}
+
+.fondo{
+
+	background: black;
+}
+
+a{
+
+	color: white;
+
+}
+
+.Control_personalizado{
+    text-decoration: none;
+    padding: 7px;
+    /*font-weight: 200px;*/
+    font-size: 15px;
+    color: black;
+    background-color: white;
+    border-radius: 6px;
+    border: 2px solid #0016b0;
+  }

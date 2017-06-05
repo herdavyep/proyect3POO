@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>FRUTAS Y VERDURAS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<a href="views.html">Volver</a>
+
+			<pre>
+				<p>
+					<font size="4">
+					
+						package com.fruteria.views.Facturas;
+
+						import javax.swing.*;
+						import javax.swing.table.DefaultTableModel;
+						import javax.swing.table.TableModel;
+						import java.awt.event.ActionEvent;
+						import java.awt.event.ActionListener;
+						import java.util.ArrayList;
+						import java.util.List;
+
+						import com.fruteria.DAO.mysql.MysqlFactura;
+						import com.fruteria.DAO.mysql.MysqlProducto;
+						import com.fruteria.misExcepciones.Excepcion;
+						import com.fruteria.modelos.Factura;
+						import com.fruteria.modelos.Producto;
+						import com.mxrck.autocompleter.TextAutoCompleter;
+
+						/**
+						 * Created by Afuro on 16/05/2017.
+						 */
+						public class CrearFactura {
+
+						    private JPanel JPanelCrearFactura;
+						    private JButton ACEPTARButton;
+						    private JButton CANCELARButton;
+						    private JTable JTableProductos;
+						    private JTable JTableProductosFactura;
+						    private JButton ButtonAgregarProducto;
+						    private JTextField textFieldCantidad;
+						    private JLabel JLabelPrecioTotal;
+						    private JTextField textFieldNombreCliente;
+						    private static JFrame crearFactura;
+						    private ArrayList&lt;String&gt; listaNombres = new ArrayList&lt;String&gt;();
+						    private TextAutoCompleter textAutoCompleter = new TextAutoCompleter(textFieldNombreCliente);
+						    int i2 = 0;
+						    TableModel tableModelPedido = new DefaultTableModel(10,5);
+						    int precioTotal = 0;
+						    StringBuffer productoS = new StringBuffer();
+						    int cantidad = 0;
+
+
+
+						    public CrearFactura() {
+
+						        /*ysqlUsuario usuarios = new MysqlUsuario();
+
+						        List&lt;Usuario&gt; listado = usuarios.listar();
+
+						        for (Usuario usuario: listado){
+						           // textAutoCompleter.addItem(usuario.getNombre().toString()+ " " + usuario.getApellidos().toString());
+						        }*/
+
+						        // textAutoCompleter.setMode(0);
+
+						        JTableProductosFactura.setModel(tableModelPedido);
+
+						        MysqlProducto productos = new MysqlProducto();
+						        String[] columnNames = new String[] {"ID", "NOMBRE", "CATEGORIA", "PRECIO KG", "DISPONIBLE"};
+						        String[] columnNamesPedido = new String[] {"ID", "NOMBRE", "CATEGORIA", "PRECIO KG", "CANTIDAD"};
+
+						        List&lt;Producto&gt; listado = productos.listar();
+						        Object[][] data = new Object[listado.size()][5];
+						        Object[][] pedido = new Object[10][5];
+
+						        try{
+						            int i = 0;
+
+						            for (Producto producto:listado) {
+						                data[i] = new Object[]{producto.getId(),
+						                        producto.getNombre(),
+						                        producto.getCategoria(),
+						                        producto.getPrecioUnidad(),
+						                        producto.getCantidadDisponiblePeso()};
+						                i++;
+						            }
+
+						            TableModel dataModel = new DefaultTableModel(data, columnNames);
+						            JTableProductos.setModel(dataModel);
+
+						        }catch (Excepcion ee){
+						            System.out.println(ee.getMessage());
+
+						        }
+
+
+
+
+
+						        CANCELARButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+						                ListarFacturas.main();
+						                crearFactura.setVisible(false);
+						            }
+						        });
+						        ACEPTARButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+
+						                Factura FacturaNueva = new Factura();
+
+						                FacturaNueva.setNombreCliente(textFieldNombreCliente.getText().toString());
+						                FacturaNueva.setPrecioTotal(JLabelPrecioTotal.getText().toString());
+						                FacturaNueva.setProductos(String.valueOf(productoS));
+						                FacturaNueva.setCantidad(String.valueOf(cantidad));
+
+						                if ((validar(FacturaNueva.getNombreCliente()))||
+						                        (validar(FacturaNueva.getPrecioTotal()))||
+						                                (validar(FacturaNueva.getProductos()))||
+						                                (validar(FacturaNueva.getCantidad()))){
+						                    JOptionPane.showMessageDialog(null, "Tiene campos vacios");
+						                }else{
+						                    MysqlFactura facturaNueva = new MysqlFactura();
+						                    facturaNueva.insertar(FacturaNueva);
+						                    JOptionPane.showMessageDialog(null, "La Factura se creo con exito");
+						                    ListarFacturas.main();
+						                    crearFactura.setVisible(false);
+						                }
+
+
+
+						            }
+						        });
+
+						        ButtonAgregarProducto.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+
+						                int selectedProducto = (int) JTableProductos.getValueAt(JTableProductos.getSelectedRow(),0);
+
+						                for (Producto producto:listado) {
+
+						                    if (selectedProducto == producto.getId()) {
+
+						                        pedido[i2] = new Object[]{producto.getId(),
+						                                producto.getNombre(),
+						                                producto.getCategoria(),
+						                                producto.getPrecioUnidad(),
+						                                textFieldCantidad.getText().toString()};
+						                        i2++;
+
+						                        precioTotal = precioTotal + (Integer.parseInt(producto.getPrecioUnidad()) * Integer.parseInt(textFieldCantidad.getText().toString()));
+						                        cantidad = cantidad + Integer.parseInt(textFieldCantidad.getText().toString());
+						                        JLabelPrecioTotal.setText(String.valueOf(precioTotal));
+
+						                        tableModelPedido = new DefaultTableModel(pedido, columnNamesPedido);
+						                        JTableProductosFactura.setModel(tableModelPedido);
+
+						                        productoS.append(" - "+producto.getNombre()+" - "+textFieldCantidad.getText().toString()+"kg"+" x "+producto.getPrecioUnidad());
+
+						                    }
+						                }
+
+						            }
+						        });
+
+						    }
+
+						    public boolean validar(String ValidarCampo){
+						        return (ValidarCampo.equals(""))? true:false;
+						    }
+
+						    public static void main() {
+						        JFrame frame = new JFrame("Crear Factura");
+						        frame.setContentPane(new CrearFactura().JPanelCrearFactura);
+						        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						        frame.pack();
+						        frame.setVisible(true);
+						        crearFactura = frame;
+						    }
+
+						}
+
+
+					</font>	
+				</p>
+			</pre>
+		</code>	
+		
+
+
+</body>
+</html>
+
+

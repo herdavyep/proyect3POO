@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>FRUTAS Y VERDURAS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<a href="modelos.html">Volver</a>
+
+			<pre>
+				<p>
+					<font size="4">
+					
+						package com.fruteria.modelos;
+
+						/**
+						 * Created by Afuro on 15/05/2017.
+						 */
+						public class Producto {
+						    private int id;
+						    private String nombre;
+						    private String categoria;
+						    private String precioUnidad;
+						    private String cantidadDisponiblePeso;
+
+						    public Producto() {
+						    }
+
+						    public Producto(int id, String nombre, String categoria, String precioUnidad, String cantidadDisponiblePeso) {
+						        this.id = id;
+						        this.nombre = nombre;
+						        this.categoria = categoria;
+						        this.precioUnidad = precioUnidad;
+						        this.cantidadDisponiblePeso = cantidadDisponiblePeso;
+
+						    }
+
+						    public Producto(String nombre, String categoria, String precioUnidad, String cantidadDisponiblePeso) {
+						        this.nombre = nombre;
+						        this.categoria = categoria;
+						        this.precioUnidad = precioUnidad;
+						        this.cantidadDisponiblePeso = cantidadDisponiblePeso;
+						    }
+
+						    public int getId() {
+						        return id;
+						    }
+
+						    public void setId(int id) {
+						        this.id = id;
+						    }
+
+						    public String getNombre() {
+						        return nombre;
+						    }
+
+						    public void setNombre(String nombre) {
+						        this.nombre = nombre;
+						    }
+
+						    public String getCategoria() {
+						        return categoria;
+						    }
+
+						    public void setCategoria(String categoria) {
+						        this.categoria = categoria;
+						    }
+
+						    public String getPrecioUnidad() {
+						        return precioUnidad;
+						    }
+
+						    public void setPrecioUnidad(String precioUnidad) {
+						        this.precioUnidad = precioUnidad;
+						    }
+
+						    public String getCantidadDisponiblePeso() {
+						        return cantidadDisponiblePeso;
+						    }
+
+						    public void setCantidadDisponiblePeso(String cantidadDisponiblePeso) {
+						        this.cantidadDisponiblePeso = cantidadDisponiblePeso;
+						    }
+
+						    @Override
+						    public String toString() {
+						        return "Producto{" +
+						                "id=" + id +
+						                ", nombre='" + nombre + '\'' +
+						                ", categoria='" + categoria + '\'' +
+						                ", precioUnidad='" + precioUnidad + '\'' +
+						                ", cantidadDisponiblePeso='" + cantidadDisponiblePeso + '\'' +
+						                '}';
+						    }
+						}
+
+
+					</font>	
+				</p>
+			</pre>
+		</code>	
+		
+
+
+</body>
+</html>
+
+

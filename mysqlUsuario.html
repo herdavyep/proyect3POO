@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>FRUTAS Y VERDURAS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<a href="dao.html">Volver</a>
+
+			<pre>
+				<p>
+					<font size="4">
+					
+						package com.fruteria.DAO.mysql;
+
+						import com.fruteria.DAO.interfaces.UsuarioDAO;
+						import com.fruteria.misExcepciones.Excepcion;
+						import com.fruteria.modelos.Categoria;
+						import com.fruteria.modelos.Usuario;
+
+						import java.sql.*;
+						import java.util.ArrayList;
+						import java.util.List;
+
+						/**
+						 * Created by Afuro on 15/05/2017.
+						 */
+						 
+						public class MysqlUsuario implements UsuarioDAO {
+
+						    private final String INSERTAR = "INSERT INTO usuario (nombre, apellidos, cedula, telefono, direccion, fecha_Cumpleanos) VALUES (?, ?, ?, ?, ?, ?)";
+						    private final String EDITAR = "UPDATE usuario SET nombre = ?, apellidos = ?,cedula = ?, telefono = ?, direccion = ?, fecha_Cumpleanos = ? WHERE id_usuario = ?";
+						    private final String LISTAR = "SELECT id_usuario, nombre, apellidos, cedula, telefono, direccion, fecha_Cumpleanos FROM usuario";
+						    private final String ELIMINAR = "DELETE FROM usuario WHERE id_usuario = ?";
+
+						    private Connection conexion;
+						    private PreparedStatement sentencia;
+						    private ResultSet resultado;
+
+						    @Override
+						    public void insertar(Usuario o) {
+						        try {
+						            conexion = new MysqlConexion().conectar();
+						            sentencia = conexion.prepareStatement(INSERTAR, Statement.RETURN_GENERATED_KEYS);
+						            sentencia.setString(1, o.getNombre());
+						            sentencia.setString(2, o.getApellidos());
+						            sentencia.setString(3, o.getCedula());
+						            sentencia.setString(4, o.getTelefono());
+						            sentencia.setString(5, o.getDireccion());
+						            sentencia.setString(6, o.getFechaCumpleanos());
+
+						            if (sentencia.executeUpdate() == 0) {
+						                throw new Excepcion("[Error al Insertar]");
+						            }
+						            resultado = sentencia.getGeneratedKeys();
+						            if (resultado.next()) {
+						                o.setId(resultado.getInt(1));
+						            }
+
+						        } catch (SQLException sqle) {
+						            throw new Excepcion(sqle.getMessage());
+						        } finally {
+						            cerrarConexion();
+						        }
+
+						    }
+
+						    @Override
+						    public void editar(Usuario o) {
+						        try {
+						            conexion = new MysqlConexion().conectar();
+						            sentencia = conexion.prepareStatement(EDITAR);
+						            sentencia.setString(1, o.getNombre());
+						            sentencia.setString(2, o.getApellidos());
+						            sentencia.setString(3, o.getCedula());
+						            sentencia.setString(4, o.getTelefono());
+						            sentencia.setString(5, o.getDireccion());
+						            sentencia.setString(6, o.getFechaCumpleanos());
+						            sentencia.setInt(7, o.getId());
+
+						            if (sentencia.executeUpdate() == 0) {
+						                throw new Excepcion("[Error al Editar]");
+						            }
+
+						        } catch (SQLException sqle) {
+						            throw new Excepcion(sqle.getMessage());
+						        } finally {
+						            cerrarConexion();
+						        }
+						    }
+
+						    @Override
+						    public void eliminar(Usuario o) {
+						        try {
+						            conexion = new MysqlConexion().conectar();
+						            sentencia = conexion.prepareStatement(ELIMINAR);
+						            sentencia.setInt(1, o.getId());
+						            if (sentencia.executeUpdate() == 0) {
+						                throw new Excepcion("[Error al Eliminar]");
+						            }
+						        } catch (SQLException sqle) {
+						            throw new Excepcion(sqle.getMessage());
+						        } finally {
+						            cerrarConexion();
+						        }
+						    }
+
+						    @Override
+						    public List&lt;Usuario&gt; listar() {
+
+						        List&lt;Usuario&gt; listado = new ArrayList&lt;&gt;();
+						        try {
+						            conexion = new MysqlConexion().conectar();
+						            sentencia = conexion.prepareStatement(LISTAR);
+						            resultado = sentencia.executeQuery();
+						            while(resultado.next()){
+						                Usuario usuario = new Usuario();
+						                usuario.setId(resultado.getInt("id_usuario"));
+						                usuario.setNombre(resultado.getString("nombre"));
+						                usuario.setApellidos(resultado.getString("apellidos"));
+						                usuario.setCedula(resultado.getString("cedula"));
+						                usuario.setTelefono(resultado.getString("telefono"));
+						                usuario.setDireccion(resultado.getString("direccion"));
+						                usuario.setFechaCumpleanos(resultado.getString("fecha_cumpleanos"));
+
+						                listado.add(usuario);
+						            }
+
+						        } catch (SQLException sqle) {
+						            throw new Excepcion(sqle.getMessage());
+						        } finally {
+						            cerrarConexion();
+						        }
+						        return listado;
+
+						    }
+
+						    public void cerrarConexion() {
+						        try {
+						            if (resultado != null) {
+						                resultado.close();
+						            }
+						            if (sentencia != null) {
+						                sentencia.close();
+						            }
+						            if (conexion != null) {
+						                conexion.close();
+						            }
+						        } catch (SQLException sqle) {
+						        }
+						    }
+						}
+
+
+					</font>	
+				</p>
+			</pre>
+		</code>	
+		
+
+
+</body>
+</html>
+
+

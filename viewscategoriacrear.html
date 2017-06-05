@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>FRUTAS Y VERDURAS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<a href="views.html">Volver</a>
+
+			<pre>
+				<p>
+					<font size="4">
+					
+						package com.fruteria.views.Categorias;
+
+						import com.fruteria.DAO.interfaces.CategoriaDAO;
+						import com.fruteria.DAO.mysql.MysqlCategoria;
+						import com.fruteria.misExcepciones.Excepcion;
+						import com.fruteria.modelos.Categoria;
+
+						import javax.swing.*;
+						import java.awt.event.ActionEvent;
+						import java.awt.event.ActionListener;
+
+						/**
+						 * Created by Afuro on 16/05/2017.
+						 */
+						public class CrearCategoria {
+						    private JTextField textFieldNombre;
+						    private JButton buttonCrearCategoria;
+						    private JButton buttonCancelarCrearCategoria;
+						    private JPanel JPanelCrearCategoria;
+						    private JTextArea textAreaDescripcion;
+						    private static JFrame crearCategoria;
+
+						    public CrearCategoria() {
+						        buttonCancelarCrearCategoria.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+						                ListarCategorias.main();
+						                crearCategoria.setVisible(false);
+						            }
+						        });
+						        buttonCrearCategoria.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+
+						                Categoria categoriaNueva = new Categoria();
+						                categoriaNueva.setNombre(textFieldNombre.getText().toString());
+						                categoriaNueva.setDescripcion(textAreaDescripcion.getText().toString());
+
+
+						                if ((validar(categoriaNueva.getNombre()))||
+						                        (validar(categoriaNueva.getDescripcion()))){
+						                    JOptionPane.showMessageDialog(null, "Tiene campos vacios");
+						                }else{
+						                    MysqlCategoria categoria_nueva = new MysqlCategoria();
+						                    insertarCategoria(categoria_nueva, categoriaNueva);
+						                    JOptionPane.showMessageDialog(null, "La categoria "+categoriaNueva.getNombre() +", se creo con exito");
+						                    ListarCategorias.main();
+						                    crearCategoria.setVisible(false);
+						                }
+
+
+						            }
+						        });
+						    }
+
+
+						    public boolean validar(String ValidarCampo){
+						        return (ValidarCampo.equals(""))? true:false;
+						    }
+
+						    private static void insertarCategoria(CategoriaDAO categoriaDAO, Categoria categoria){
+						        try{
+						            categoriaDAO.insertar(categoria);
+						            System.out.println("Gracias a Dios");
+						        }catch (Excepcion heriberto){
+						            System.out.println(heriberto.getMessage());
+						        }
+						    }
+
+						    public static void main() {
+						        JFrame frame = new JFrame("CrearCategoria");
+						        frame.setContentPane(new CrearCategoria().JPanelCrearCategoria);
+						        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						        frame.pack();
+						        frame.setVisible(true);
+						        crearCategoria = frame;
+						    }
+						}
+
+
+					</font>	
+				</p>
+			</pre>
+		</code>	
+		
+
+
+</body>
+</html>
+
+

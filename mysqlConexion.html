@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>FRUTAS Y VERDURAS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<a href="dao.html">Volver</a>
+
+			<pre>
+				<p>
+					<font size="4">
+					
+						package com.fruteria.DAO.mysql;
+
+						import java.sql.Connection;
+						import java.sql.DriverManager;
+						import java.sql.SQLException;
+
+						/**
+						 * Created by Afuro on 15/05/2017.
+						 */
+						 
+						public class MysqlConexion {
+						    Connection conectar() throws SQLException {
+						        Connection conexion = null;
+						        String usuario = "root";
+						        String contrasena = "root";
+						        String url = "jdbc:mysql://127.0.0.1:8889/fruteriaFinal";
+						        //String contrasena = "";
+						        //String url = "jdbc:mysql://127.0.0.1:3306/fruteria";
+						        try{
+						            conexion = DriverManager.getConnection(url, usuario, contrasena);
+						        }catch (SQLException sqle){
+						            throw sqle;
+						        }
+						        return conexion;
+						    }
+						}
+
+
+					</font>	
+				</p>
+			</pre>
+		</code>	
+		
+
+
+</body>
+</html>
+
+

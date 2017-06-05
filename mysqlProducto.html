@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>FRUTAS Y VERDURAS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<a href="dao.html">Volver</a>
+
+			<pre>
+				<p>
+					<font size="4">
+					
+						package com.fruteria.DAO.mysql;
+
+						import com.fruteria.DAO.interfaces.ProductoDAO;
+						import com.fruteria.misExcepciones.Excepcion;
+						import com.fruteria.modelos.Producto;
+
+						import java.sql.*;
+						import java.util.ArrayList;
+						import java.util.List;
+
+						/**
+						 * Created by Afuro on 16/05/2017.
+						 */
+						public class MysqlProducto implements ProductoDAO {
+
+						    private final String INSERTAR = "INSERT INTO producto (nombre, categoria, precio_unidad, peso) VALUE(?, ?, ?, ?)";
+						    private final String EDITAR = "UPDATE producto SET nombre = ?, categoria = ?, precio_unidad = ?, peso  = ? WHERE id_producto = ?";
+						    private final String LISTAR = "SELECT id_producto, nombre, categoria, precio_unidad, peso FROM producto";
+						    private final String ELIMINAR = "DELETE FROM producto WHERE id_producto = ?";
+
+						    private Connection conexion;
+						    private PreparedStatement sentencia;
+						    private ResultSet resultado;
+
+
+						    @Override
+						    public void insertar(Producto o) {
+						        try {
+						            conexion = new MysqlConexion().conectar();
+						            sentencia = conexion.prepareStatement(INSERTAR, Statement.RETURN_GENERATED_KEYS);
+						            sentencia.setString(1, o.getNombre());
+						            sentencia.setString(2, o.getCategoria());
+						            sentencia.setString(3, o.getPrecioUnidad());
+						            sentencia.setString(4, o.getCantidadDisponiblePeso());
+
+						            if (sentencia.executeUpdate() == 0) {
+						                throw new Excepcion("[Error al Insertar]");
+						            }
+						            resultado = sentencia.getGeneratedKeys();
+						            if (resultado.next()) {
+						                o.setId(resultado.getInt(1));
+						            }
+
+						        } catch (SQLException sqle) {
+						            throw new Excepcion(sqle.getMessage());
+						        } finally {
+						            cerrarConexion();
+						        }
+
+
+						    }
+
+						    @Override
+						    public void editar(Producto o) {
+						        try {
+						            conexion = new MysqlConexion().conectar();
+						            sentencia = conexion.prepareStatement(EDITAR);
+						            sentencia.setString(1, o.getNombre());
+						            sentencia.setString(2, o.getCategoria());
+						            sentencia.setString(3, o.getPrecioUnidad());
+						            sentencia.setString(4, o.getCantidadDisponiblePeso());
+						            sentencia.setInt(5, o.getId());
+
+						            if (sentencia.executeUpdate() == 0) {
+						                throw new Excepcion("[Error al Editar]");
+						            }
+
+						        } catch (SQLException sqle) {
+						            throw new Excepcion(sqle.getMessage());
+						        } finally {
+						            cerrarConexion();
+						        }
+						    }
+
+						    @Override
+						    public void eliminar(Producto o) {
+						        try {
+						            conexion = new MysqlConexion().conectar();
+						            sentencia = conexion.prepareStatement(ELIMINAR);
+						            sentencia.setInt(1, o.getId());
+						            if (sentencia.executeUpdate() == 0) {
+						                throw new Excepcion("[Error al Eliminar]");
+						            }
+						        } catch (SQLException sqle) {
+						            throw new Excepcion(sqle.getMessage());
+						        } finally {
+						            cerrarConexion();
+						        }
+						    }
+						    @Override
+						    public List&lt;Producto&gt; listar() {
+						        List&lt;Producto&gt; listado = new ArrayList&lt;&gt;();
+						        try {
+						            conexion = new MysqlConexion().conectar();
+						            sentencia = conexion.prepareStatement(LISTAR);
+						            resultado = sentencia.executeQuery();
+						            while(resultado.next()){
+						                Producto producto = new Producto();
+						                producto.setId(resultado.getInt("id_producto"));
+						                producto.setNombre(resultado.getString("nombre"));
+						                producto.setCategoria(resultado.getString("categoria"));
+						                producto.setPrecioUnidad(resultado.getString("precio_unidad"));
+						                producto.setCantidadDisponiblePeso(resultado.getString("peso"));
+
+						                listado.add(producto);
+						            }
+
+						        } catch (SQLException sqle) {
+						            throw new Excepcion(sqle.getMessage());
+						        } finally {
+						            cerrarConexion();
+						        }
+						        return listado;
+
+						    }
+
+
+
+						    public void cerrarConexion(){
+						        try{
+						            if(resultado != null){
+						                resultado.close();
+						            }
+						            if(sentencia != null){
+						                sentencia.close();
+						            }
+						            if(conexion != null){
+						                conexion.close();
+						            }
+						        }catch (SQLException sqle){}
+						    }
+						}
+
+
+					</font>	
+				</p>
+			</pre>
+		</code>	
+		
+
+
+</body>
+</html>
+
+

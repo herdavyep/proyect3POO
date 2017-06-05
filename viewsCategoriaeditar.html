@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>FRUTAS Y VERDURAS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<a href="views.html">Volver</a>
+
+			<pre>
+				<p>
+					<font size="4">
+					
+						package com.fruteria.views.Categorias;
+
+						import com.fruteria.DAO.mysql.MysqlCategoria;
+						import com.fruteria.modelos.Categoria;
+
+						import javax.swing.*;
+						import java.awt.event.ActionEvent;
+						import java.awt.event.ActionListener;
+
+						/**
+						 * Created by heriberto on 4/06/17.
+						 */
+						public class EditarCategoria {
+						    private JPanel EditarCategoria;
+						    private JTextField textFieldNombre;
+						    private JTextArea textAreadescripcion;
+						    private JButton ACEPTARButton;
+						    private JButton CANCELARButton;
+
+
+						    private static Categoria categoriaEditar;
+
+
+						    public EditarCategoria() {
+
+
+						        textFieldNombre.setText(categoriaEditar.getNombre());
+						        textAreadescripcion.setText(categoriaEditar.getDescripcion());
+
+
+						        {
+						            CANCELARButton.addActionListener(new ActionListener() {
+						                @Override
+						                public void actionPerformed(ActionEvent e) {
+
+						                    ListarCategorias.main();
+						                    EditarCategoria.setVisible(false);
+
+						                }
+						            });
+						        }
+
+
+						        ACEPTARButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+
+						                categoriaEditar.setNombre(textFieldNombre.getText().toString());
+						                categoriaEditar.setDescripcion(textAreadescripcion.getText().toString());
+
+
+						                if ((validar(categoriaEditar.getNombre()))||
+						                        (validar(categoriaEditar.getDescripcion()))){
+						                    JOptionPane.showMessageDialog(null, "Tiene campos vacios");
+						                }else{
+						                    MysqlCategoria categoria_editar = new MysqlCategoria();
+						                    categoria_editar.editar(categoriaEditar);
+						                    JOptionPane.showMessageDialog(null, "La categoria "+ categoriaEditar.getNombre() +", se edito con exito");
+						                    ListarCategorias.main();
+						                    EditarCategoria.setVisible(false);
+						                }
+
+
+						            }
+						        });
+
+						    }
+
+						    public boolean validar(String ValidarCampo){
+						        return (ValidarCampo.equals(""))? true:false;
+						    }
+
+
+						    public static void main(Categoria categoria) {
+						        categoriaEditar = categoria;
+						        JFrame frame = new JFrame("EditarCategoria");
+						        frame.setContentPane(new EditarCategoria().EditarCategoria);
+						        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						        frame.pack();
+						        frame.setVisible(true);
+						    }
+						}
+
+
+					</font>	
+				</p>
+			</pre>
+		</code>	
+		
+
+
+</body>
+</html>
+
+

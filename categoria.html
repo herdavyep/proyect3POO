@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>FRUTAS Y VERDURAS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<a href="modelos.html">Volver</a>
+
+			<pre>
+				<p>
+					<font size="4">
+					
+						package com.fruteria.modelos;
+
+						/**
+						 * Created by Afuro on 15/05/2017.
+						 */
+						public class Categoria {
+						    private int id;
+						    private String nombre;
+						    private String descripcion;
+
+						    public Categoria() {
+						    }
+
+						    public Categoria(int id, String nombre, String descripcion) {
+						        this.id = id;
+						        this.nombre = nombre;
+						        this.descripcion = descripcion;
+						    }
+						    public Categoria(String nombre, String descripcion) {
+						        this.nombre = nombre;
+						        this.descripcion = descripcion;
+						    }
+
+						    public int getId() {
+						        return id;
+						    }
+
+						    public void setId(int id) {
+						        this.id = id;
+						    }
+
+						    public String getNombre() {
+						        return nombre;
+						    }
+
+						    public void setNombre(String nombre) {
+						        this.nombre = nombre;
+						    }
+
+						    public String getDescripcion() {
+						        return descripcion;
+						    }
+
+						    public void setDescripcion(String descripcion) {
+						        this.descripcion = descripcion;
+						    }
+
+						    @Override
+						    public String toString() {
+						        return "Categoria{" +
+						                "id=" + id +
+						                ", nombre='" + nombre + '\'' +
+						                ", descripcion='" + descripcion + '\'' +
+						                '}';
+						    }
+						}
+
+
+					</font>	
+				</p>
+			</pre>
+		</code>	
+		
+
+
+</body>
+</html>
+
+

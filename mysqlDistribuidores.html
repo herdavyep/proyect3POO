@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>FRUTAS Y VERDURAS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<a href="dao.html">Volver</a>
+
+			<pre>
+				<p>
+					<font size="4">
+					
+						package com.fruteria.DAO.mysql;
+
+						import com.fruteria.DAO.interfaces.MapaDistribuidoresDAO;
+						import com.fruteria.misExcepciones.Excepcion;
+						import com.fruteria.modelos.Categoria;
+						import com.fruteria.modelos.MapaDistribuidores;
+
+						import java.sql.*;
+						import java.util.ArrayList;
+						import java.util.List;
+
+						/**
+						 * Created by Afuro on 16/05/2017.
+						 */
+						public class MysqlMapaDistribuidores implements MapaDistribuidoresDAO {
+
+						    private final String INSERTAR = "INSERT INTO mapa_distribuidores (nombre, direccion, ejeX, ejeY) VALUES (?, ?, ?, ?)";
+						    private final String EDITAR = "UPDATE mapa_distribuidores SET nombre = ?, direccion = ?, ejeX = ?, ejeY = ? WHERE id_mapa_distribuidores = ?";
+						    private final String LISTAR = "SELECT id_mapa_distribuidores, nombre, direccion, ejeX. ejeY FROM mapa_distribuidores ";
+						    private final String ELIMINAR = "DELETE FROM mapa_distribuidores WHERE id_mapa_distribuidores = ?";
+
+						    private Connection conexion;
+						    private PreparedStatement sentencia;
+						    private ResultSet resultado;
+
+
+						    @Override
+						    public void insertar(MapaDistribuidores o) {
+						        try {
+						            conexion = new MysqlConexion().conectar();
+						            sentencia = conexion.prepareStatement(INSERTAR, Statement.RETURN_GENERATED_KEYS);
+						            sentencia.setString(1, String.valueOf(o.getNombre()));
+						            sentencia.setString(2, String.valueOf(o.getDireccion()));
+						            sentencia.setString(3, String.valueOf(o.getEjeX()));
+						            sentencia.setString(4, String.valueOf(o.getEjeY()));
+
+						            if (sentencia.executeUpdate() == 0) {
+						                throw new Excepcion("[Error al Insertar]");
+						            }
+						            resultado = sentencia.getGeneratedKeys();
+						            if (resultado.next()) {
+						                o.setId(resultado.getInt(1));
+						            }
+
+						        } catch (SQLException sqle) {
+						            throw new Excepcion(sqle.getMessage());
+						        } finally {
+						            cerrarConexion();
+						        }
+						    }
+
+						    @Override
+						    public void editar(MapaDistribuidores o) {
+						        try {
+						            conexion = new MysqlConexion().conectar();
+						            sentencia = conexion.prepareStatement(EDITAR);
+						            sentencia.setString(1, String.valueOf(o.getNombre()));
+						            sentencia.setString(2, String.valueOf(o.getDireccion()));
+						            sentencia.setString(3, String.valueOf(o.getEjeX()));
+						            sentencia.setString(4, String.valueOf(o.getEjeY()));
+						            sentencia.setInt(5, o.getId());
+
+						            if (sentencia.executeUpdate() == 0) {
+						                throw new Excepcion("[Error al Editar]");
+						            }
+
+						        } catch (SQLException sqle) {
+						            throw new Excepcion(sqle.getMessage());
+						        } finally {
+						            cerrarConexion();
+						        }
+						    }
+
+						    @Override
+						    public void eliminar(MapaDistribuidores o) {
+						        try {
+						            conexion = new MysqlConexion().conectar();
+						            sentencia = conexion.prepareStatement(ELIMINAR);
+						            sentencia.setInt(1, o.getId());
+						            if (sentencia.executeUpdate() == 0) {
+						                throw new Excepcion("[Error al Eliminar]");
+						            }
+						        } catch (SQLException sqle) {
+						            throw new Excepcion(sqle.getMessage());
+						        } finally {
+						            cerrarConexion();
+						        }
+						    }
+
+						    @Override
+						    public List<MapaDistribuidores> listar() {
+
+						        List <MapaDistribuidores> c = new ArrayList<>();
+
+						        return c;
+
+						    }
+
+						    public void cerrarConexion() {
+						        try {
+						            if (resultado != null) {
+						                resultado.close();
+						            }
+						            if (sentencia != null) {
+						                sentencia.close();
+						            }
+						            if (conexion != null) {
+						                conexion.close();
+						            }
+						        } catch (SQLException sqle) {
+						        }
+						    }
+						}
+
+
+					</font>	
+				</p>
+			</pre>
+		</code>	
+		
+
+
+</body>
+</html>
+
+

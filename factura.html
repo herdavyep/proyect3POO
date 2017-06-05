@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>FRUTAS Y VERDURAS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<a href="modelos.html">Volver</a>
+
+			<pre>
+				<p>
+					<font size="4">
+					
+						package com.fruteria.modelos;
+
+						import java.util.Arrays;
+
+						/**
+						 * Created by Afuro on 15/05/2017.
+						 */
+						public class Factura {
+						    private int id;
+						    private String nombreCliente;
+						    private String precioTotal;
+						    private String productos;
+						    private String cantidad;
+
+						    public Factura() {
+						    }
+
+						    public Factura(int id, String nombreCliente, String precioTotal, String productos) {
+						        this.id = id;
+						        this.nombreCliente = nombreCliente;
+						        this.precioTotal = precioTotal;
+						        this.productos = productos;
+						    }
+
+						    public Factura(String nombreCliente, String precioTotal, String productos) {
+						        this.nombreCliente = nombreCliente;
+						        this.precioTotal = precioTotal;
+						        this.productos = productos;
+						    }
+
+						    public Factura(int id, String nombreCliente, String precioTotal, String productos, String cantidad) {
+						        this.id = id;
+						        this.nombreCliente = nombreCliente;
+						        this.precioTotal = precioTotal;
+						        this.productos = productos;
+						        this.cantidad = cantidad;
+						    }
+
+						    public int getId() {
+						        return id;
+						    }
+
+						    public void setId(int id) {
+						        this.id = id;
+						    }
+
+						    public String getNombreCliente() {
+						        return nombreCliente;
+						    }
+
+						    public void setNombreCliente(String nombreCliente) {
+						        this.nombreCliente = nombreCliente;
+						    }
+
+						    public String getPrecioTotal() {
+						        return precioTotal;
+						    }
+
+						    public void setPrecioTotal(String precioTotal) {
+						        this.precioTotal = precioTotal;
+						    }
+
+						    public String  getProductos() {
+						        return productos;
+						    }
+
+						    public void setProductos(String productos) {
+						        this.productos = productos;
+						    }
+
+						    public String getCantidad() {
+						        return cantidad;
+						    }
+
+						    public void setCantidad(String cantidad) {
+						        this.cantidad = cantidad;
+						    }
+
+						    @Override
+						    public String toString() {
+						        return "Factura{" +
+						                "id=" + id +
+						                ", nombreCliente='" + nombreCliente + '\'' +
+						                ", precioTotal='" + precioTotal + '\'' +
+						                ", productos='" + productos + '\'' +
+						                ", cantidad=" + cantidad +
+						                '}';
+						    }
+						}
+
+
+					</font>	
+				</p>
+			</pre>
+		</code>	
+		
+
+
+</body>
+</html>
+
+

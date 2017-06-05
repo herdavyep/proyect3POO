@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>FRUTAS Y VERDURAS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<a href="views.html">Volver</a>
+
+			<pre>
+				<p>
+					<font size="4">
+					
+						package com.fruteria.views.Facturas;
+
+						import com.fruteria.DAO.mysql.MysqlFactura;
+						import com.fruteria.misExcepciones.Excepcion;
+						import com.fruteria.modelos.Factura;
+						import com.fruteria.views.Inventario.ListarInventario;
+						import com.fruteria.views.MenuPrincipal.MenuPrincipal;
+
+						import javax.swing.*;
+						import javax.swing.table.DefaultTableModel;
+						import javax.swing.table.TableModel;
+						import java.awt.event.ActionEvent;
+						import java.awt.event.ActionListener;
+						import java.util.List;
+
+						/**
+						 * Created by Afuro on 16/05/2017.
+						 */
+						public class ListarFacturas {
+						    private JButton VOLVERButton;
+						    private JButton CREARFACTURAButton;
+						    private JPanel JPanelFacturas;
+						    private JButton ELIMINARFACTURAButton;
+						    private JTable JTableFacturas;
+						    private static JFrame listarFacturas;
+
+						    public ListarFacturas() {
+
+						        MysqlFactura facturas = new MysqlFactura();
+
+						        String[] columnNames = new String[] {"ID", "NOMBRE", "PRODUCTOS" ,"PRECIO"};
+
+						        List&lt;Factura&gt; listado = facturas.listar();
+
+						        Object[][] data = new Object[listado.size()][columnNames.length];
+
+						        try{
+
+						            int i = 0;
+
+						            for (Factura factura:listado) {
+
+						                data[i] = new Object[]{factura.getId(),
+						                        factura.getNombreCliente(),
+						                        factura.getProductos(),
+						                        factura.getPrecioTotal()};
+
+
+						                i++;
+						            }
+
+						            TableModel dataModel = new DefaultTableModel(data, columnNames);
+
+						            JTableFacturas.setModel(dataModel);
+
+						        }catch (Excepcion ee){
+						            System.out.println(ee.getMessage());
+
+						        }
+
+						        CREARFACTURAButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+						                CrearFactura.main();
+						                listarFacturas.setVisible(false);
+						            }
+						        });
+						        VOLVERButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+						                MenuPrincipal.main();
+						                listarFacturas.setVisible(false);
+						            }
+						        });
+
+
+						        ELIMINARFACTURAButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+
+
+						                int selectedFactura = (int) JTableFacturas.getValueAt(JTableFacturas.getSelectedRow(),0);
+
+						                for (Factura factura :listado) {
+
+						                    if (selectedFactura == factura.getId()){
+
+						                        int opcion = JOptionPane.showConfirmDialog(null,"¿Esta seguro de que desea eliminar la factura " + factura.getNombreCliente() + "?");
+
+						                        if (opcion == 0){
+						                            facturas.eliminar(factura);
+						                        }
+
+						                        listarFacturas.setVisible(false);
+						                        ListarFacturas.main();
+						                    }
+
+
+						                }
+						            }
+						        });
+						    }
+
+						    public static void main() {
+						        JFrame frame = new JFrame("ListarFacturas");
+						        frame.setContentPane(new ListarFacturas().JPanelFacturas);
+						        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						        frame.pack();
+						        frame.setVisible(true);
+						        listarFacturas = frame;
+						    }
+						}
+
+
+					</font>	
+				</p>
+			</pre>
+		</code>	
+		
+
+
+</body>
+</html>
+
+

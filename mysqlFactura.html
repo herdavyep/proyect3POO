@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>FRUTAS Y VERDURAS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<a href="dao.html">Volver</a>
+
+			<pre>
+				<p>
+					<font size="4">
+					
+						package com.fruteria.DAO.mysql;
+
+						import com.fruteria.DAO.interfaces.FacturaDAO;
+						import com.fruteria.misExcepciones.Excepcion;
+						import com.fruteria.modelos.Categoria;
+						import com.fruteria.modelos.Factura;
+
+						import java.sql.*;
+						import java.util.ArrayList;
+						import java.util.List;
+
+						/**
+						 * Created by Afuro on 16/05/2017.
+						 */
+						public class MysqlFactura implements FacturaDAO {
+
+						    private final String INSERTAR = "INSERT INTO factura(nombre_cliente, precio_total, productos, cantidad) VALUES (?, ?, ?, ?)";
+						    private final String EDITAR = "UPDATE factura SET nombre_cliente = ?, precio_total = ?, productos = ? , cantidad = ? WHERE id_factura = ?";
+						    private final String LISTAR = "SELECT id_factura, nombre_cliente, precio_total, productos, cantidad FROM factura";
+						    private final String ELIMINAR = "DELETE FROM factura WHERE id_factura = ?";
+
+						    private Connection conexion;
+						    private PreparedStatement sentencia;
+						    private ResultSet resultado;
+
+						    @Override
+						    public void insertar(Factura o) {
+						        try{
+						            conexion = new MysqlConexion().conectar();
+						            sentencia = conexion.prepareStatement(INSERTAR, Statement.RETURN_GENERATED_KEYS);
+						            sentencia.setString(1, o.getNombreCliente());
+						            sentencia.setString(2, o.getPrecioTotal());
+						            sentencia.setString(3, o.getProductos());
+						            sentencia.setString(4, o.getCantidad());
+
+						            if(sentencia.executeUpdate() == 0){
+						                throw new Excepcion("[Error al Insertar]");
+						            }resultado = sentencia.getGeneratedKeys();
+						            if(resultado.next()){
+						                o.setId(resultado.getInt(1));
+						            }
+						        }catch (SQLException sqle){
+						            throw new Excepcion(sqle.getMessage());
+						        }finally {
+						            cerrarConexion();
+						        }
+
+						    }
+
+						    @Override
+						    public void editar(Factura o) {
+
+						        try {
+						            conexion = new MysqlConexion().conectar();
+						            sentencia = conexion.prepareStatement(EDITAR);
+						            sentencia.setString(1, o.getNombreCliente());
+						            sentencia.setString(2, o.getPrecioTotal());
+						            sentencia.setString(3, o.getProductos());
+						            sentencia.setInt(4, o.getId());
+
+						            if (sentencia.executeUpdate() == 0) {
+						                throw new Excepcion("[Error al Editar]");
+						            }
+
+						        } catch (SQLException sqle) {
+						            throw new Excepcion(sqle.getMessage());
+						        } finally {
+						            cerrarConexion();
+						        }
+
+						    }
+
+						    @Override
+						    public void eliminar(Factura o) {
+						        try {
+						            conexion = new MysqlConexion().conectar();
+						            sentencia = conexion.prepareStatement(ELIMINAR);
+						            sentencia.setInt(1, o.getId());
+						            if (sentencia.executeUpdate() == 0) {
+						                throw new Excepcion("[Error al Eliminar]");
+						            }
+						        } catch (SQLException sqle) {
+						            throw new Excepcion(sqle.getMessage());
+						        } finally {
+						            cerrarConexion();
+						        }
+						    }
+
+
+						    @Override
+						    public List&lt;Factura&gt; listar() {
+
+						        List &lt;Factura&gt; listado = new ArrayList&lt;&gt;();
+
+						        try {
+						            conexion = new MysqlConexion().conectar();
+						            sentencia = conexion.prepareStatement(LISTAR);
+						            resultado = sentencia.executeQuery();
+						            while(resultado.next()){
+						                Factura factura = new Factura();
+						                factura.setId(resultado.getInt("id_factura"));
+						                factura.setNombreCliente(resultado.getString("nombre_cliente"));
+						                factura.setProductos(resultado.getString("productos"));
+						                factura.setPrecioTotal(resultado.getString("precio_total"));
+						                factura.setCantidad(resultado.getString("cantidad"));
+
+						                listado.add(factura);
+						            }
+
+						        } catch (SQLException sqle) {
+						            throw new Excepcion(sqle.getMessage());
+						        } finally {
+						            cerrarConexion();
+						        }
+						        return listado;
+
+
+						    }
+
+						    public void cerrarConexion(){
+						        try{
+						            if(resultado != null){
+						                resultado.close();
+						            }
+						            if(sentencia != null){
+						                sentencia.close();
+						            }
+						            if(conexion != null){
+						                conexion.close();
+						            }
+						        }catch (SQLException sqle){}
+						    }
+						}
+
+
+					</font>	
+				</p>
+			</pre>
+		</code>	
+		
+
+
+</body>
+</html>
+
+

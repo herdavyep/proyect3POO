@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>FRUTAS Y VERDURAS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<a href="views.html">Volver</a>
+
+			<pre>
+				<p>
+					<font size="4">
+					
+						package com.fruteria.views.Categorias;
+
+						import com.fruteria.DAO.mysql.MysqlCategoria;
+						import com.fruteria.misExcepciones.Excepcion;
+						import com.fruteria.modelos.Categoria;
+						import com.fruteria.modelos.Producto;
+						import com.fruteria.views.Inventario.ListarInventario;
+						import com.fruteria.views.Productos.EditarProducto;
+
+						import javax.swing.*;
+						import javax.swing.table.DefaultTableModel;
+						import javax.swing.table.TableModel;
+						import java.awt.event.ActionEvent;
+						import java.awt.event.ActionListener;
+						import java.util.List;
+
+						/**
+						 * Created by Afuro on 16/05/2017.
+						 */
+						public class ListarCategorias {
+						    private JPanel JPanelListarCategorias;
+						    private JButton VOLVERButton;
+						    private JButton AGREGARCATEGORIAButton;
+						    private JButton EDITARCATEGORIAButton;
+						    private JButton ELIMINARCATEGORIAButton;
+						    private JTable JTableCategorias;
+						    private static JFrame listarCategorias;
+
+						    public ListarCategorias() {
+
+						        MysqlCategoria categorias = new MysqlCategoria();
+
+						        String[] columnNames = new String[] {"ID", "NOMBRE", "DESCRIPCION"};
+
+						        List<Categoria> listado = categorias.listar();
+
+						        Object[][] data = new Object[listado.size()][columnNames.length];
+
+						        try{
+
+						            int i = 0;
+
+						            for (Categoria categoria:listado) {
+
+						                data[i] = new Object[]{categoria.getId(),
+						                        categoria.getNombre(),
+						                        categoria.getDescripcion()};
+
+
+						                i++;
+						            }
+
+						            TableModel dataModel = new DefaultTableModel(data, columnNames);
+
+						            JTableCategorias.setModel(dataModel);
+
+						        }catch (Excepcion ee){
+						            System.out.println(ee.getMessage());
+
+						        }
+
+
+						        VOLVERButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+						                ListarInventario.main();
+						                listarCategorias.setVisible(false);
+						            }
+						        });
+						        AGREGARCATEGORIAButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+						                CrearCategoria.main();
+						                listarCategorias.setVisible(false);
+						            }
+						        });
+						        EDITARCATEGORIAButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+
+
+						                int selectedCategoria = (int) JTableCategorias.getValueAt(JTableCategorias.getSelectedRow(),0);
+
+						                for (Categoria categoria:listado) {
+
+						                    if (selectedCategoria == categoria.getId()) {
+
+						                        EditarCategoria.main(categoria);
+						                        listarCategorias.setVisible(false);
+
+						                    }
+						                }
+
+
+						            }
+						        });
+						        ELIMINARCATEGORIAButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+
+						                int selectedCategoria = (int) JTableCategorias.getValueAt(JTableCategorias.getSelectedRow(),0);
+
+						                for (Categoria categoria:listado) {
+
+						                    if (selectedCategoria == categoria.getId()){
+
+						                        int opcion = JOptionPane.showConfirmDialog(null,"¿Esta seguro de que desea eliminar la categoria " + categoria.getNombre() + "?");
+
+						                        if (opcion == 0){
+						                            categorias.eliminar(categoria);
+						                        }
+
+						                        listarCategorias.setVisible(false);
+						                        ListarCategorias.main();
+						                    }
+
+
+						                }
+
+
+
+
+						            }
+						        });
+						    }
+
+						    public static void main() {
+						        JFrame frame = new JFrame("ListarCategorias");
+						        frame.setContentPane(new ListarCategorias().JPanelListarCategorias);
+						        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						        frame.pack();
+						        frame.setVisible(true);
+						        listarCategorias = frame;
+						    }
+						}
+
+
+					</font>	
+				</p>
+			</pre>
+		</code>	
+		
+
+
+</body>
+</html>
+
+
