@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>FRUTAS Y VERDURAS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<a href="views.html">Volver</a>
+
+			<pre>
+				<p>
+					<font size="4">
+					
+						package com.fruteria.views.MenuPrincipal;
+
+						import com.fruteria.views.Facturas.ListarFacturas;
+						import com.fruteria.views.Inventario.ListarInventario;
+						import com.fruteria.views.Usuarios.CrearUsuario;
+						import com.fruteria.views.Usuarios.ListarUsuarios;
+
+						import javax.swing.*;
+						import java.awt.event.ActionEvent;
+						import java.awt.event.ActionListener;
+
+						/**
+						 * Created by Afuro on 22/05/2017.
+						 */
+						public class MenuPrincipal {
+						    private JPanel JPanelMenuPrincipal;
+						    private JLabel JLabelTituloFruteria;
+						    private JButton buttonFacturas;
+						    private JButton buttonInventario;
+						    private JButton ButtonUsuarios;
+						    private JButton buttonDistribuidores;
+						    private static JFrame menuPrincipal;
+
+						    public MenuPrincipal() {
+						        ButtonUsuarios.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+						                ListarUsuarios.main();
+						                menuPrincipal.setVisible(false);
+						            }
+						        });
+						        buttonInventario.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+						                ListarInventario.main();
+						                menuPrincipal.setVisible(false);
+						            }
+						        });
+						        buttonFacturas.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+						                ListarFacturas.main();
+						                menuPrincipal.setVisible(false);
+						            }
+						        });
+						    }
+
+						    public static void main(String[] args) {
+						        JFrame frame = new JFrame("MenuPrincipal");
+						        frame.setContentPane(new MenuPrincipal().JPanelMenuPrincipal);
+						        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						        frame.pack();
+						        frame.setVisible(true);
+						        menuPrincipal = frame;
+						    }
+
+						    public static void main() {
+						        JFrame frame = new JFrame("MenuPrincipal");
+						        frame.setContentPane(new MenuPrincipal().JPanelMenuPrincipal);
+						        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						        frame.pack();
+						        frame.setVisible(true);
+						        menuPrincipal = frame;
+						    }
+						}
+
+
+					</font>	
+				</p>
+			</pre>
+		</code>	
+		
+
+
+</body>
+</html>
+
+

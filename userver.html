@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>FRUTAS Y VERDURAS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<a href="index.html">Volver</a>
+
+			<pre>
+				<p>
+					<font size="4">
+					
+						package com.fruteria.views.Usuarios;
+
+						import com.fruteria.DAO.mysql.MysqlUsuario;
+						import com.fruteria.misExcepciones.Excepcion;
+						import com.fruteria.modelos.Producto;
+						import com.fruteria.modelos.Usuario;
+						import com.fruteria.views.MenuPrincipal.MenuPrincipal;
+						import com.fruteria.views.Productos.EditarProducto;
+
+						import javax.swing.*;
+						import javax.swing.table.DefaultTableModel;
+						import javax.swing.table.TableModel;
+						import java.awt.event.ActionEvent;
+						import java.awt.event.ActionListener;
+						import java.util.List;
+
+						/**
+						 * Created by Afuro on 16/05/2017.
+						 */
+						public class ListarUsuarios {
+						    private JPanel JPanelListarUsuarios;
+						    private JLabel JLabelUsuarios;
+						    private JButton CREARUSUARIOButton;
+						    private JButton INICIOButton;
+						    private JButton EDITARUSUARIOButton;
+						    private JButton ELIMINARUSUARIOButton;
+						    private JTable JTableUsuarios;
+						    private static JFrame listarUsuarios;
+
+						    public ListarUsuarios() {
+
+						        MysqlUsuario usuarios = new MysqlUsuario();
+
+						        String[] columnNames = new String[] {"ID", "NOMBRE", "APELLIDOS", "CEDULA", "TELEFONO","DIRECCION","CUMPLEAÑOS"};
+
+						        List&lt;Usuario&gt; listado = usuarios.listar();
+
+						        Object[][] data = new Object[listado.size()][7];
+
+						        try{
+
+						            int i = 0;
+
+						            for (Usuario usuario :listado) {
+
+						                data[i] = new Object[]{usuario.getId(),
+						                        usuario.getNombre(),
+						                        usuario.getApellidos(),
+						                        usuario.getCedula(),
+						                        usuario.getTelefono(),
+						                        usuario.getDireccion(),
+						                        usuario.getFechaCumpleanos(),};
+
+						                i++;
+						            }
+
+						            TableModel dataModel = new DefaultTableModel(data, columnNames);
+
+
+						            JTableUsuarios.setModel(dataModel);
+
+
+						        }catch (Excepcion ee){
+						            System.out.println(ee.getMessage());
+
+						        }
+
+
+						        CREARUSUARIOButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+						                CrearUsuario.main();
+						                listarUsuarios.setVisible(false);
+						            }
+
+						        });
+
+
+						        INICIOButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+						                MenuPrincipal.main();
+						                listarUsuarios.setVisible(false);
+						            }
+						        });
+
+
+						        EDITARUSUARIOButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+
+
+						                int selectedUsuario = (int) JTableUsuarios.getValueAt(JTableUsuarios.getSelectedRow(),0);
+
+						                for (Usuario usuario:listado) {
+
+						                    if (selectedUsuario == usuario.getId()) {
+
+						                        EditarUsuario.main(usuario);
+						                        listarUsuarios.setVisible(false);
+
+						                    }
+						                }
+						            }
+
+						        });
+
+
+						        ELIMINARUSUARIOButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+
+
+						                int selectedProducto = (int) JTableUsuarios.getValueAt(JTableUsuarios.getSelectedRow(),0);
+
+						                for (Usuario usuario:listado) {
+
+						                    if (selectedProducto == usuario.getId()){
+
+						                        int opcion = JOptionPane.showConfirmDialog(null,"¿Esta seguro de que desea eliminar el usuario " + usuario.getNombre() + "?");
+
+						                        if (opcion == 0){
+						                            usuarios.eliminar(usuario);
+						                        }
+
+						                        listarUsuarios.setVisible(false);
+						                        ListarUsuarios.main();
+						                    }
+
+
+						                }
+
+
+
+						            }
+						        });
+						    }
+
+						    public static void main() {
+						        JFrame frame = new JFrame("ListarUsuarios");
+						        frame.setContentPane(new ListarUsuarios().JPanelListarUsuarios);
+						        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						        frame.pack();
+						        frame.setVisible(true);
+						        listarUsuarios = frame;
+						    }
+						}
+
+
+					</font>	
+				</p>
+			</pre>
+		</code>	
+		
+
+
+</body>
+</html>
+
+

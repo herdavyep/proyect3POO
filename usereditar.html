@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>FRUTAS Y VERDURAS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<a href="index.html">Volver</a>
+
+			<pre>
+				<p>
+					<font size="4">
+					
+						package com.fruteria.views.Usuarios;
+
+						import com.fruteria.DAO.mysql.MysqlUsuario;
+						import com.fruteria.modelos.Usuario;
+						import com.fruteria.views.Inventario.ListarInventario;
+
+						import javax.swing.*;
+						import java.awt.event.ActionEvent;
+						import java.awt.event.ActionListener;
+
+						/**
+						 * Created by heriberto on 4/06/17.
+						 */
+						public class EditarUsuario {
+
+
+						    private JTextField textFieldDireccion;
+						    private JTextField textFieldApellidos;
+						    private JTextField textFieldNombre;
+						    private JTextField textFieldTelefono;
+						    private JTextField textFieldcedula;
+						    private JComboBox comboBoxMes;
+						    private JComboBox comboBoxDia;
+						    private JButton ACEPTARButton;
+						    private JButton CANCELARButton;
+						    private JPanel EditarUsuario;
+						    private JLabel JLabelcumpleanos;
+
+
+						    private static Usuario usuarioEditar;
+
+						    public EditarUsuario() {
+
+						        textFieldNombre.setText(usuarioEditar.getNombre());
+						        textFieldApellidos.setText(usuarioEditar.getApellidos());
+						        textFieldTelefono.setText(usuarioEditar.getTelefono());
+						        textFieldcedula.setText(usuarioEditar.getCedula());
+						        textFieldDireccion.setText(usuarioEditar.getDireccion());
+						        JLabelcumpleanos.setText(String.valueOf(usuarioEditar.getFechaCumpleanos()));
+
+
+						        {
+
+						            CANCELARButton.addActionListener(new ActionListener() {
+						                @Override
+						                public void actionPerformed(ActionEvent e) {
+
+						                    ListarUsuarios.main();
+						                    EditarUsuario.setVisible(false);
+						                }
+						            });
+
+						        }
+
+
+						        ACEPTARButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+
+
+
+						                usuarioEditar.setNombre(textFieldNombre.getText().toString());
+						                usuarioEditar.setApellidos(textFieldApellidos.getText().toString());
+						                usuarioEditar.setCedula(textFieldcedula.getText().toString());
+						                usuarioEditar.setTelefono(textFieldTelefono.getText().toString());
+						                usuarioEditar.setDireccion(textFieldDireccion.getText().toString());
+
+						                String mes ="";
+						                switch (comboBoxMes.getSelectedItem().toString()){
+						                    case "Enero": mes = "1"; break;
+						                    case "Febrero": mes = "2"; break;
+						                    case "Marzo": mes = "3"; break;
+						                    case "Abril": mes = "4"; break;
+						                    case "Mayo": mes = "5"; break;
+						                    case "Junio": mes = "6"; break;
+						                    case "Julio": mes = "7"; break;
+						                    case "Agosto": mes = "8"; break;
+						                    case "Septiembre": mes = "9"; break;
+						                    case "Octubre": mes = "10"; break;
+						                    case "Noviembre": mes = "11"; break;
+						                    case "Diciembre": mes = "12"; break;
+						                }
+
+						                String cumpleanos = "2017/" + mes + "/" + comboBoxDia.getSelectedItem().toString();
+						                usuarioEditar.setFechaCumpleanos(cumpleanos);
+
+						                if ((validar(usuarioEditar.getNombre()))||
+						                        (validar(usuarioEditar.getApellidos()))||
+						                        (validar(usuarioEditar.getCedula()))||
+						                        (validar(usuarioEditar.getTelefono()))||
+						                        (validar(comboBoxDia.getSelectedItem().toString()))||
+						                        (validar(comboBoxMes.getSelectedItem().toString()))){
+						                    JOptionPane.showMessageDialog(null, "Tiene campos vacios");
+						                }else{
+						                    MysqlUsuario usuario_nuevo = new MysqlUsuario();
+						                    usuario_nuevo.editar(usuarioEditar);
+						                    JOptionPane.showMessageDialog(null, "El usuario "+usuarioEditar.getNombre() +", se edito con exito");
+						                    ListarUsuarios.main();
+						                    EditarUsuario.setVisible(false);
+						                }
+
+
+
+
+						            }
+						        });
+						    }
+
+						    public boolean validar(String ValidarCampo){
+						        return (ValidarCampo.equals(""))? true:false;
+						    }
+
+
+						    public static void main(Usuario usuario) {
+						        usuarioEditar = usuario;
+						        JFrame frame = new JFrame("EditarUsuario");
+						        frame.setContentPane(new EditarUsuario().EditarUsuario);
+						        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						        frame.pack();
+						        frame.setVisible(true);
+						    }
+						}
+
+
+					</font>	
+				</p>
+			</pre>
+		</code>	
+		
+
+
+</body>
+</html>
+
+

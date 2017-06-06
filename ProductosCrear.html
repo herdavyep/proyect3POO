@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>FRUTAS Y VERDURAS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<a href="views.html">Volver</a>
+
+			<pre>
+				<p>
+					<font size="4">
+					
+						package com.fruteria.views.Productos;
+
+						import com.fruteria.DAO.interfaces.ProductoDAO;
+						import com.fruteria.DAO.mysql.MysqlCategoria;
+						import com.fruteria.DAO.mysql.MysqlProducto;
+						import com.fruteria.misExcepciones.Excepcion;
+						import com.fruteria.modelos.Categoria;
+						import com.fruteria.modelos.Producto;
+						import com.fruteria.views.Inventario.ListarInventario;
+
+						import javax.swing.*;
+						import java.awt.event.ActionEvent;
+						import java.awt.event.ActionListener;
+						import java.util.List;
+
+						/**
+						 * Created by Afuro on 16/05/2017.
+						 */
+						public class CrearProducto {
+
+						    private JPanel JPanelCrearProducto;
+						    private JTextField textFieldPrecio;
+						    private JTextField textFieldPeso;
+						    private JTextField textFieldCategoria;
+						    private JTextField textFieldNombre;
+						    private JButton ACEPTARButton;
+						    private JButton CANCELARButton;
+						    private JComboBox JComboBoxCategoria;
+						    private static JFrame crearProducto;
+
+
+						    public CrearProducto() {
+
+						        MysqlCategoria categorias = new MysqlCategoria();
+
+						        List&lt;Categoria&gt; listado = categorias.listar();
+
+						        for (Categoria categoria: listado){
+						            JComboBoxCategoria.addItem(categoria.getNombre());
+						        }
+
+
+
+						        {
+						            CANCELARButton.addActionListener(new ActionListener() {
+						                @Override
+						                public void actionPerformed(ActionEvent e) {
+						                    ListarInventario.main();
+						                    crearProducto.setVisible(false);
+						                }
+						            });
+						        }
+						        ACEPTARButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+						                //AQUI SQL CREAR PRODUCTO
+
+						                Producto ProductoNuevo = new Producto();
+						                ProductoNuevo.setNombre(textFieldNombre.getText().toString());
+						                ProductoNuevo.setCategoria(JComboBoxCategoria.getSelectedItem().toString());
+						                ProductoNuevo.setPrecioUnidad(textFieldPrecio.getText().toString());
+						                ProductoNuevo.setCantidadDisponiblePeso(textFieldPeso.getText().toString());
+
+
+
+						                if ((validar(ProductoNuevo.getNombre()))||
+						                        (validar(ProductoNuevo.getCategoria()))||
+						                        (validar(ProductoNuevo.getPrecioUnidad()))||
+						                        (validar(ProductoNuevo.getCantidadDisponiblePeso()))){
+						                    JOptionPane.showMessageDialog(null, "Tiene campos vacios");
+						                }else{
+						                    MysqlProducto producto_nuevo = new MysqlProducto();
+						                    insertarProducto(producto_nuevo, ProductoNuevo);
+						                    JOptionPane.showMessageDialog(null, "El producto "+ProductoNuevo.getNombre() +", se creo con exito");
+						                    ListarInventario.main();
+						                    crearProducto.setVisible(false);
+						                }
+
+						            }
+						        });
+						    }
+
+						    public boolean validar(String ValidarCampo){
+						        return (ValidarCampo.equals(""))? true:false;
+						    }
+
+						    private static void insertarProducto(ProductoDAO productoDAO, Producto productoNuevo){
+						        try{
+						            productoDAO.insertar(productoNuevo);
+						            System.out.println("Gracias a Dios");
+						        }catch (Excepcion heriberto){
+						            System.out.println(heriberto.getMessage());
+						        }
+						    }
+
+						    public static void main() {
+						        JFrame frame = new JFrame("Crear Producto");
+						        frame.setContentPane(new CrearProducto().JPanelCrearProducto);
+						        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						        frame.pack();
+						        frame.setVisible(true);
+						        crearProducto = frame;
+						    }
+						}
+
+
+					</font>	
+				</p>
+			</pre>
+		</code>	
+		
+
+
+</body>
+</html>
+
+

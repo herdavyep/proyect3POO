@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>FRUTAS Y VERDURAS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<a href="views.html">Volver</a>
+
+			<pre>
+				<p>
+					<font size="4">
+					
+						package com.fruteria.views.Inventario;
+
+						import com.fruteria.DAO.interfaces.ProductoDAO;
+						import com.fruteria.DAO.mysql.MysqlProducto;
+						import com.fruteria.misExcepciones.Excepcion;
+						import com.fruteria.modelos.Producto;
+						import com.fruteria.views.Categorias.ListarCategorias;
+						import com.fruteria.views.MenuPrincipal.MenuPrincipal;
+						import com.fruteria.views.Productos.CrearProducto;
+						import com.fruteria.views.Productos.EditarProducto;
+
+						import javax.swing.*;
+						import javax.swing.table.DefaultTableModel;
+						import javax.swing.table.TableModel;
+						import java.awt.event.ActionEvent;
+						import java.awt.event.ActionListener;
+						import java.util.List;
+
+						/**
+						 * Created by Afuro on 16/05/2017.
+						 */
+						public class ListarInventario {
+
+						    private JPanel JPanelInventario;
+						    private JLabel JLabelInventario;
+						    private JButton INICIOButton;
+						    private JButton AGREGARPRODUCTOButton;
+						    private JButton CATEGORIASButton;
+						    private JTable tablaInventario;
+						    private JTable JTableInventario;
+						    private JButton ELIMINARPRODUCTOButton;
+						    private JButton EDITARPRODUCTOButton;
+						    private static JFrame listarInventario;
+
+
+						    public ListarInventario() {
+
+						        MysqlProducto productos = new MysqlProducto();
+
+						        String[] columnNames = new String[] {"ID", "NOMBRE", "CATEGORIA", "PRECIO KG", "DISPONIBLE"};
+
+						        List&lt;Producto&gt; listado = productos.listar();
+
+						        Object[][] data = new Object[listado.size()][columnNames.length];
+
+						        try{
+
+						            int i = 0;
+
+						            for (Producto producto:listado) {
+
+						                data[i] = new Object[]{producto.getId(),
+						                        producto.getNombre(),
+						                        producto.getCategoria(),
+						                        producto.getPrecioUnidad(),
+						                        producto.getCantidadDisponiblePeso()};
+
+
+						                i++;
+						            }
+
+						            TableModel dataModel = new DefaultTableModel(data, columnNames);
+
+						            /*TableModel dataModel = new AbstractTableModel() {
+						                @Override
+						                public int getRowCount() {
+						                    return listado.size();
+						                }
+
+						                @Override
+						                public int getColumnCount() {
+						                    return 7;
+						                }
+
+						                @Override
+						                public String getColumnName (int col){
+						                    return columnNames[col];
+						                }
+
+						                @Override
+						                public Object getValueAt(int rowIndex, int columnIndex) {
+						                    return data[rowIndex][columnIndex];
+						                }
+						            };*/
+
+						            JTableInventario.setModel(dataModel);
+
+						        }catch (Excepcion ee){
+						            System.out.println(ee.getMessage());
+
+						        }
+
+						        INICIOButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+
+						                MenuPrincipal.main();
+						                listarInventario.setVisible(false);
+						            }
+						        });
+
+
+						        AGREGARPRODUCTOButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+						                CrearProducto.main();
+						                listarInventario.setVisible(false);
+						            }
+						        });
+						        CATEGORIASButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+						                ListarCategorias.main();
+						                listarInventario.setVisible(false);
+						            }
+						        });
+
+
+						        ELIMINARPRODUCTOButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+
+						                int selectedProducto = (int) JTableInventario.getValueAt(JTableInventario.getSelectedRow(),0);
+
+						                for (Producto producto:listado) {
+
+						                    if (selectedProducto == producto.getId()){
+
+						                        int opcion = JOptionPane.showConfirmDialog(null,"¿Esta seguro de que desea eliminar el producto " + producto.getNombre() + "?");
+
+						                        if (opcion == 0){
+						                            productos.eliminar(producto);
+						                        }
+
+						                        listarInventario.setVisible(false);
+						                        ListarInventario.main();
+						                    }
+
+
+						                }
+
+						            }
+						        });
+
+						        EDITARPRODUCTOButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+
+						                int selectedProducto = (int) JTableInventario.getValueAt(JTableInventario.getSelectedRow(),0);
+
+						                for (Producto producto:listado) {
+
+						                    if (selectedProducto == producto.getId()) {
+
+						                        EditarProducto.main(producto);
+						                        listarInventario.setVisible(false);
+
+						                    }
+						                }
+						            }
+						        });
+						    }
+
+						    private static Producto ListarProducto(ProductoDAO productoDAO, Producto productoNuevo){
+						        try{
+						            //productoDAO.listar(productoNuevo);
+						            System.out.println("Gracias a Dios");
+						        }catch (Excepcion heriberto){
+						            System.out.println(heriberto.getMessage());
+						        }
+						        return productoNuevo;
+						    }
+
+						    public static void main() {
+						        JFrame frame = new JFrame("Inventario");
+						        frame.setContentPane(new ListarInventario().JPanelInventario);
+						        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						        frame.pack();
+						        frame.setVisible(true);
+						        listarInventario = frame;
+						    }
+						}
+
+
+					</font>	
+				</p>
+			</pre>
+		</code>	
+		
+
+
+</body>
+</html>
+
+

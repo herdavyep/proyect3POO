@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>FRUTAS Y VERDURAS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+	<a href="views.html">Volver</a>
+
+			<pre>
+				<p>
+					<font size="4">
+					
+						package com.fruteria.views.Productos;
+
+						import com.fruteria.DAO.interfaces.ProductoDAO;
+						import com.fruteria.DAO.mysql.MysqlCategoria;
+						import com.fruteria.DAO.mysql.MysqlProducto;
+						import com.fruteria.misExcepciones.Excepcion;
+						import com.fruteria.modelos.Categoria;
+						import com.fruteria.modelos.Producto;
+						import com.fruteria.views.Inventario.ListarInventario;
+
+						import javax.swing.*;
+						import java.awt.event.ActionEvent;
+						import java.awt.event.ActionListener;
+						import java.util.List;
+
+						/**
+						 * Created by Afuro on 2/06/2017.
+						 */
+						public class EditarProducto {
+
+						    private JTextField textFieldPrecio;
+						    private JTextField textFieldPeso;
+						    private JTextField textFieldNombre;
+						    private JButton ACEPTARButton;
+						    private JButton CANCELARButton;
+						    private static JFrame editarProducto;
+						    private JPanel JPanelEditarProducto;
+						    private JComboBox JComboBoxCategoria;
+
+						    private static Producto productoEditar;
+
+						    public EditarProducto() {
+
+						        MysqlCategoria categorias = new MysqlCategoria();
+
+						        List&lt;Categoria&gt; listado = categorias.listar();
+
+						        for (Categoria categoria: listado){
+						            JComboBoxCategoria.addItem(categoria.getNombre());
+						        }
+
+						        JComboBoxCategoria.setSelectedItem(productoEditar.getCategoria().toString());
+						        textFieldNombre.setText(productoEditar.getNombre());
+						        textFieldPrecio.setText(productoEditar.getPrecioUnidad());
+						        textFieldPeso.setText(productoEditar.getCantidadDisponiblePeso());
+
+
+
+						        {
+						            CANCELARButton.addActionListener(new ActionListener() {
+						                @Override
+						                public void actionPerformed(ActionEvent e) {
+						                    ListarInventario.main();
+						                    editarProducto.setVisible(false);
+						                }
+						            });
+						        }
+
+						        ACEPTARButton.addActionListener(new ActionListener() {
+						            @Override
+						            public void actionPerformed(ActionEvent e) {
+						                //AQUI SQL CREAR PRODUCTO
+
+
+						                productoEditar.setNombre(textFieldNombre.getText().toString());
+						                productoEditar.setCategoria(JComboBoxCategoria.getSelectedItem().toString());
+						                productoEditar.setPrecioUnidad(textFieldPrecio.getText().toString());
+						                productoEditar.setCantidadDisponiblePeso(textFieldPeso.getText().toString());
+
+						                if ((validar(productoEditar.getNombre()))||
+						                        (validar(productoEditar.getCategoria()))||
+						                        (validar(productoEditar.getPrecioUnidad()))||
+						                        (validar(productoEditar.getCantidadDisponiblePeso()))){
+						                    JOptionPane.showMessageDialog(null, "Tiene campos vacios");
+						                }else{
+						                    MysqlProducto producto = new MysqlProducto();
+						                    System.out.println(productoEditar.getId());
+						                    producto.editar(productoEditar);
+
+						                    JOptionPane.showMessageDialog(null, "El usuario "+productoEditar.getNombre() +", se edito con exito");
+						                    ListarInventario.main();
+						                    editarProducto.setVisible(false);
+						                }
+
+						            }
+						        });
+						    }
+
+						    public boolean validar(String ValidarCampo){
+						        return (ValidarCampo.equals(""))? true:false;
+						    }
+
+
+
+						    public static void main(Producto producto) {
+						        productoEditar = producto;
+						        JFrame frame = new JFrame("Editar Producto");
+						        frame.setContentPane(new EditarProducto().JPanelEditarProducto);
+						        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						        frame.pack();
+						        frame.setVisible(true);
+						        editarProducto = frame;
+						    }
+						}
+
+
+					</font>	
+				</p>
+			</pre>
+		</code>	
+		
+
+
+</body>
+</html>
+
+
